@@ -12,7 +12,9 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   })
 
   useEffect(() => {
-    supabase.auth.getSession().then(({ data: { session } }) => {
+    console.log('AuthProvider: Initializing...')
+    supabase.auth.getSession().then(({ data: { session }, error }) => {
+      console.log('AuthProvider: Session loaded:', session?.user?.email || 'no session', error?.message || '')
       setState((prev) => ({
         ...prev,
         session,
@@ -23,6 +25,7 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
 
     const { data: { subscription } } = supabase.auth.onAuthStateChange(
       (_event, session) => {
+        console.log('AuthProvider: Auth state changed:', _event, session?.user?.email || 'no user')
         setState((prev) => ({
           ...prev,
           session,
@@ -35,22 +38,27 @@ export function AuthProvider({ children }: { children: React.ReactNode }) {
   }, [])
 
   const signIn = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signInWithPassword({
+    console.log('AuthProvider: Signing in with:', email)
+    const { data, error } = await supabase.auth.signInWithPassword({
       email,
       password,
     })
+    console.log('AuthProvider: Sign in result:', data?.user?.email || 'no user', error?.message || 'success')
     return { error }
   }
 
   const signUp = async (email: string, password: string) => {
-    const { error } = await supabase.auth.signUp({
+    console.log('AuthProvider: Signing up with:', email)
+    const { data, error } = await supabase.auth.signUp({
       email,
       password,
     })
+    console.log('AuthProvider: Sign up result:', data?.user?.email || 'no user', error?.message || 'success')
     return { error }
   }
 
   const signOut = async () => {
+    console.log('AuthProvider: Signing out')
     await supabase.auth.signOut()
   }
 

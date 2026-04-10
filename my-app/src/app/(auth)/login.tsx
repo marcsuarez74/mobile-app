@@ -16,12 +16,18 @@ export default function LoginScreen() {
       return
     }
 
+    console.log('Tentative de connexion avec:', email)
     setLoading(true)
     const { error } = await signIn(email, password)
     setLoading(false)
 
     if (error) {
+      console.log('Erreur de connexion:', error.message)
       Alert.alert('Erreur', error.message)
+    } else {
+      console.log('Connexion réussie ! Redirection...')
+      // Force la redirection vers la page Home
+      router.replace('/(app)/home')
     }
   }
 
