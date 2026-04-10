@@ -1,8 +1,7 @@
 import { useState } from 'react'
-import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert } from 'react-native'
+import { View, Text, TextInput, TouchableOpacity, ActivityIndicator, Alert, StyleSheet } from 'react-native'
 import { useRouter } from 'expo-router'
 import { useAuth } from '@/lib/auth-context'
-import '@/styles/global.css'
 
 export default function RegisterScreen() {
   const [email, setEmail] = useState('')
@@ -44,78 +43,119 @@ export default function RegisterScreen() {
   }
 
   return (
-    <View className="flex-1 bg-white justify-center px-8">
-      <View className="mb-10">
-        <Text className="text-3xl font-bold text-gray-800 text-center">
-          Inscription
-        </Text>
-        <Text className="text-gray-500 text-center mt-2">
-          Créez votre compte
-        </Text>
+    <View style={styles.container}>
+      <View style={styles.header}>
+        <Text style={styles.title}>Inscription</Text>
+        <Text style={styles.subtitle}>Créez votre compte</Text>
       </View>
 
-      <View className="space-y-4">
-        <View>
-          <Text className="text-sm font-medium text-gray-700 mb-2">Email</Text>
-          <TextInput
-            className="border border-gray-300 rounded-lg px-4 py-3 text-gray-800"
-            placeholder="votre@email.com"
-            keyboardType="email-address"
-            autoCapitalize="none"
-            value={email}
-            onChangeText={setEmail}
-          />
-        </View>
+      <View style={styles.form}>
+        <Text style={styles.label}>Email</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="votre@email.com"
+          keyboardType="email-address"
+          autoCapitalize="none"
+          value={email}
+          onChangeText={setEmail}
+        />
 
-        <View>
-          <Text className="text-sm font-medium text-gray-700 mb-2">Mot de passe</Text>
-          <TextInput
-            className="border border-gray-300 rounded-lg px-4 py-3 text-gray-800"
-            placeholder="••••••••"
-            secureTextEntry
-            value={password}
-            onChangeText={setPassword}
-          />
-        </View>
+        <Text style={styles.label}>Mot de passe</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="••••••••"
+          secureTextEntry
+          value={password}
+          onChangeText={setPassword}
+        />
 
-        <View>
-          <Text className="text-sm font-medium text-gray-700 mb-2">
-            Confirmer le mot de passe
-          </Text>
-          <TextInput
-            className="border border-gray-300 rounded-lg px-4 py-3 text-gray-800"
-            placeholder="••••••••"
-            secureTextEntry
-            value={confirmPassword}
-            onChangeText={setConfirmPassword}
-          />
-        </View>
+        <Text style={styles.label}>Confirmer le mot de passe</Text>
+        <TextInput
+          style={styles.input}
+          placeholder="••••••••"
+          secureTextEntry
+          value={confirmPassword}
+          onChangeText={setConfirmPassword}
+        />
 
         <TouchableOpacity
           onPress={handleRegister}
           disabled={loading}
-          className={`rounded-lg py-4 mt-4 ${
-            loading ? 'bg-blue-400' : 'bg-blue-600'
-          }`}
+          style={[styles.button, loading && styles.buttonDisabled]}
         >
           {loading ? (
             <ActivityIndicator color="white" />
           ) : (
-            <Text className="text-white text-center font-semibold text-lg">
-              S'inscrire
-            </Text>
+            <Text style={styles.buttonText}>S'inscrire</Text>
           )}
         </TouchableOpacity>
 
-        <TouchableOpacity
-          onPress={() => router.push('/login')}
-          className="mt-4"
-        >
-          <Text className="text-blue-600 text-center">
-            Déjà un compte ? Connectez-vous
-          </Text>
+        <TouchableOpacity onPress={() => router.push('/login')} style={styles.linkContainer}>
+          <Text style={styles.link}>Déjà un compte ? Connectez-vous</Text>
         </TouchableOpacity>
       </View>
     </View>
   )
 }
+
+const styles = StyleSheet.create({
+  container: {
+    flex: 1,
+    backgroundColor: 'white',
+    justifyContent: 'center',
+    paddingHorizontal: 32,
+  },
+  header: {
+    marginBottom: 40,
+  },
+  title: {
+    fontSize: 32,
+    fontWeight: 'bold',
+    color: '#1f2937',
+    textAlign: 'center',
+  },
+  subtitle: {
+    color: '#6b7280',
+    textAlign: 'center',
+    marginTop: 8,
+  },
+  form: {
+    gap: 16,
+  },
+  label: {
+    fontSize: 14,
+    fontWeight: '500',
+    color: '#374151',
+    marginBottom: 4,
+  },
+  input: {
+    borderWidth: 1,
+    borderColor: '#d1d5db',
+    borderRadius: 8,
+    paddingHorizontal: 16,
+    paddingVertical: 12,
+    color: '#1f2937',
+  },
+  button: {
+    backgroundColor: '#2563eb',
+    borderRadius: 8,
+    paddingVertical: 16,
+    marginTop: 16,
+  },
+  buttonDisabled: {
+    backgroundColor: '#60a5fa',
+  },
+  buttonText: {
+    color: 'white',
+    textAlign: 'center',
+    fontWeight: '600',
+    fontSize: 16,
+  },
+  linkContainer: {
+    marginTop: 16,
+  },
+  link: {
+    color: '#2563eb',
+    textAlign: 'center',
+  },
+})

@@ -1,7 +1,7 @@
 import { Stack, useRouter, useSegments } from 'expo-router'
 import { useEffect } from 'react'
 import { useAuth } from '@/lib/auth-context'
-import { View, ActivityIndicator } from 'react-native'
+import { View, ActivityIndicator, StyleSheet } from 'react-native'
 
 export default function AppLayout() {
   const { user, loading } = useAuth()
@@ -22,7 +22,7 @@ export default function AppLayout() {
 
   if (loading) {
     return (
-      <View className="flex-1 justify-center items-center bg-white">
+      <View style={styles.loading}>
         <ActivityIndicator size="large" color="#2563eb" />
       </View>
     )
@@ -34,3 +34,12 @@ export default function AppLayout() {
     </Stack>
   )
 }
+
+const styles = StyleSheet.create({
+  loading: {
+    flex: 1,
+    justifyContent: 'center',
+    alignItems: 'center',
+    backgroundColor: 'white',
+  },
+})
